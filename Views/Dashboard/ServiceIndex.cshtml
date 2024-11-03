@@ -1,0 +1,51 @@
+﻿@model List<(CompanyProject.Models.Service service, CompanyProject.Models.Media? media)>
+
+<h1>Services</h1>
+
+<a asp-action="CreateService" class="btn btn-success mb-3">Create New Service</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Service ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Status</th>
+            <th>Is Deleted</th> 
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (service, media) in Model)
+        {
+            <tr>
+                <td>@service.Id</td>
+                <td>@service.Title</td>
+                <td>@service.Description</td>
+                <td>
+                    @if (media != null)
+                    {
+                        <img src="/media/ServiceImages/@media.Id@media.Type" alt="@service.Title" width="100" height="100" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>
+                    <input type="checkbox" @(service.IsActive ? "checked" : "") disabled />
+                </td>
+                <td>
+                    <input type="checkbox" @(service.IsDeleted ? "checked" : "") disabled /> 
+                </td>
+                <td>
+                    <a asp-action="EditService" asp-route-id="@service.Id" class="btn btn-warning">Edit</a>
+                    <form asp-action="DeleteService" asp-route-id="@service.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this service?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
